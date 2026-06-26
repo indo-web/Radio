@@ -17,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             background-color: #5D4037;
             padding: 15px 20px;
@@ -35,13 +34,11 @@
             font-size: 1.8rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, text-shadow 0.3s;
-            user-select: none;
+            transition: transform 0.3s;
         }
 
         .logo:hover {
             transform: scale(1.05);
-            text-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
         }
 
         .search-wrapper {
@@ -67,17 +64,18 @@
         }
 
         .search-icon-large {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             margin-left: 10px;
+            position: relative;
         }
 
         .search-icon-large:hover {
@@ -86,8 +84,8 @@
 
         .search-icon-large::before {
             content: '';
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border: 4px solid #5D4037;
             border-radius: 50%;
         }
@@ -95,15 +93,14 @@
         .search-icon-large::after {
             content: '';
             position: absolute;
-            width: 10px;
+            width: 12px;
             height: 4px;
             background: #5D4037;
             transform: rotate(45deg);
-            margin-top: 12px;
-            margin-left: 14px;
+            bottom: 14px;
+            right: 12px;
         }
 
-        /* Admin Overlay */
         .admin-overlay {
             position: fixed;
             top: 0;
@@ -129,7 +126,6 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
         }
 
         .admin-popup h2 {
@@ -160,24 +156,23 @@
             margin-top: 15px;
         }
 
-        .btn-batal {
+        .btn {
             padding: 12px 25px;
-            background: #9E9E9E;
-            color: white;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn-batal {
+            background: #9E9E9E;
+            color: white;
         }
 
         .btn-kirim {
-            padding: 12px 25px;
             background: #4CAF50;
             color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
         }
 
         .btn-kirim:hover {
@@ -214,9 +209,6 @@
         .admin-section h3 {
             color: #5D4037;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .form-group {
@@ -236,7 +228,6 @@
             border: 2px solid #E0E0E0;
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
         }
 
         .form-group input:focus {
@@ -245,9 +236,50 @@
         }
 
         .hint {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #888;
             margin-top: 5px;
+        }
+
+        .btn-tambah {
+            width: 100%;
+            padding: 15px;
+            background: #E91E63;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-tambah:hover {
+            background: #C2185B;
+        }
+
+        .btn-hapus-radio {
+            width: 100%;
+            padding: 15px;
+            background: #F44336;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn-hapus-radio:hover {
+            background: #D32F2F;
+        }
+
+        .delete-section {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .delete-section.active {
+            display: block;
         }
 
         .radio-delete-list {
@@ -279,10 +311,12 @@
         .btn-hapus {
             color: #F44336;
             cursor: pointer;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             padding: 5px 12px;
             border-radius: 5px;
             transition: all 0.3s;
+            border: none;
+            background: none;
         }
 
         .btn-hapus:hover {
@@ -290,7 +324,6 @@
             color: white;
         }
 
-        /* Main Content */
         .main-content {
             padding: 20px;
             max-width: 1200px;
@@ -299,3 +332,649 @@
 
         .section-title {
             color: #5D4037;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .radio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .radio-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .radio-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .radio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .radio-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #FF9800, #E91E63);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .radio-name {
+            color: #5D4037;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .radio-status {
+            color: #8D6E63;
+            font-size: 0.85rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #8D6E63;
+            grid-column: 1 / -1;
+        }
+
+        .player-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FF9800;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .player-overlay.active {
+            display: flex;
+        }
+
+        .player-content {
+            text-align: center;
+            color: white;
+            cursor: default;
+            padding: 20px;
+        }
+
+        .player-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .player-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .player-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .blink-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .blink-dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .blink-dot:nth-child(2) { animation-delay: 0.3s; }
+        .blink-dot:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .listener-count {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .equalizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 8px;
+            height: 60px;
+            margin-top: 20px;
+        }
+
+        .eq-bar {
+            width: 12px;
+            background: linear-gradient(to top, #E91E63, #FFEB3B, #4CAF50, #2196F3, #9C27B0);
+            border-radius: 3px;
+            animation: equalize 0.8s ease-in-out infinite;
+        }
+
+        .eq-bar:nth-child(1) { animation-duration: 0.6s; }
+        .eq-bar:nth-child(2) { animation-duration: 0.8s; }
+        .eq-bar:nth-child(3) { animation-duration: 0.5s; }
+        .eq-bar:nth-child(4) { animation-duration: 0.9s; }
+        .eq-bar:nth-child(5) { animation-duration: 0.7s; }
+        .eq-bar:nth-child(6) { animation-duration: 0.6s; }
+        .eq-bar:nth-child(7) { animation-duration: 0.8s; }
+
+        @keyframes equalize {
+            0%, 100% { height: 15px; }
+            50% { height: 50px; }
+        }
+
+        .close-hint {
+            margin-top: 40px;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        #audio-player {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo" id="logo">Sungai Kecil</div>
+        <div class="search-wrapper">
+            <input type="text" class="search-input-header" id="search-input" placeholder="Cari radio...">
+            <div class="search-icon-large" id="search-icon"></div>
+        </div>
+    </header>
+
+    <!-- Admin Overlay -->
+    <div class="admin-overlay" id="admin-overlay">
+        <div class="admin-popup">
+            <h2>🔐 Akses Admin</h2>
+            
+            <!-- PIN Section -->
+            <div class="pin-verification" id="pin-section">
+                <input type="password" class="pin-input" id="pin-input" maxlength="6" placeholder="●●●●●●">
+                <p style="color: #888; font-size: 0.9rem; margin-bottom: 10px;">Masukkan PIN 6 digit</p>
+                <div class="btn-group">
+                    <button class="btn btn-batal" id="btn-batal-pin">Batal</button>
+                    <button class="btn btn-kirim" id="btn-verifikasi">Kirim</button>
+                </div>
+                <p class="pin-error" id="pin-error">PIN salah! Coba lagi.</p>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div class="admin-panel" id="admin-panel">
+                <!-- Add Radio Section -->
+                <div class="admin-section">
+                    <h3>➕ Tambah Radio Baru</h3>
+                    <div class="form-group">
+                        <label>Nama Radio</label>
+                        <input type="text" id="input-nama" placeholder="Contoh: Jazz FM Indonesia">
+                    </div>
+                    <div class="form-group">
+                        <label>Link Stream (.mp3 / https)</label>
+                        <input type="url" id="input-link" placeholder="https://stream.contoh.com/live.mp3">
+                        <p class="hint">Link harus menggunakan HTTPS dan format .mp3</p>
+                    </div>
+                    <button class="btn-tambah" id="btn-tambah">Tambah Radio</button>
+                </div>
+                
+                <!-- Delete Radio Section -->
+                <div class="admin-section">
+                    <h3>🗑️ Hapus Radio</h3>
+                    <button class="btn-hapus-radio" id="btn-hapus-radio">Hapus Radio</button>
+                    <div class="delete-section" id="delete-section">
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>Cari radio untuk dihapus</label>
+                            <input type="text" id="input-cari-hapus" placeholder="Ketik nama radio...">
+                        </div>
+                        <div class="radio-delete-list" id="radio-delete-list">
+                            <!-- List will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group" style="margin-top: 20px;">
+                    <button class="btn btn-batal" id="btn-tutup-admin">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="section-title">📻 Daftar Radio</h1>
+        <div class="radio-grid" id="radio-grid">
+            <div class="no-results">Memuat radio...</div>
+        </div>
+    </main>
+
+    <!-- Player Overlay -->
+    <div class="player-overlay" id="player-overlay">
+        <div class="player-content">
+            <div class="player-icon">📻</div>
+            <h2 class="player-title" id="player-title">Radio</h2>
+            <p class="player-subtitle" id="player-subtitle">Sedang Diputar</p>
+            <div class="blink-dots">
+                <div class="blink-dot"></div>
+                <div class="blink-dot"></div>
+                <div class="blink-dot"></div>
+            </div>
+            <div class="listener-count" id="listener-count">● 0 pendengar</div>
+            <div class="equalizer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+            <p class="close-hint">Klik di mana saja untuk menutup</p>
+        </div>
+    </div>
+
+    <audio id="audio-player"></audio>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIG - ISI DENGAN DATA ANDA
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "ISI_API_KEY_ANDA",
+            authDomain: "ISI_PROJECT.firebaseapp.com",
+            databaseURL: "https://ISI_PROJECT.firebaseio.com",
+            projectId: "ISI_PROJECT_ID",
+            storageBucket: "ISI_PROJECT.appspot.com",
+            messagingSenderId: "ISI_SENDER_ID",
+            appId: "ISI_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const radioRef = database.ref('radios');
+
+        // ============================================
+        // ELEMEN DOM
+        // ============================================
+        const logo = document.getElementById('logo');
+        const adminOverlay = document.getElementById('admin-overlay');
+        const pinSection = document.getElementById('pin-section');
+        const adminPanel = document.getElementById('admin-panel');
+        const pinInput = document.getElementById('pin-input');
+        const pinError = document.getElementById('pin-error');
+        const searchInput = document.getElementById('search-input');
+        const searchIcon = document.getElementById('search-icon');
+        const radioGrid = document.getElementById('radio-grid');
+        const playerOverlay = document.getElementById('player-overlay');
+        const audioPlayer = document.getElementById('audio-player');
+        const playerTitle = document.getElementById('player-title');
+        const playerSubtitle = document.getElementById('player-subtitle');
+        const listenerCount = document.getElementById('listener-count');
+        
+        // Admin buttons & inputs
+        const btnVerifikasi = document.getElementById('btn-verifikasi');
+        const btnBatalPin = document.getElementById('btn-batal-pin');
+        const btnTutupAdmin = document.getElementById('btn-tutup-admin');
+        const btnTambah = document.getElementById('btn-tambah');
+        const btnHapusRadio = document.getElementById('btn-hapus-radio');
+        const deleteSection = document.getElementById('delete-section');
+        const inputCariHapus = document.getElementById('input-cari-hapus');
+        const radioDeleteList = document.getElementById('radio-delete-list');
+        const inputNama = document.getElementById('input-nama');
+        const inputLink = document.getElementById('input-link');
+
+        // ============================================
+        // KONSTANTA
+        // ============================================
+        const ADMIN_PIN = '541268';
+        let allRadios = [];
+        let isAdminAuthenticated = false;
+
+        // ============================================
+        // LOAD RADIO DARI FIREBASE
+        // ============================================
+        function loadRadios() {
+            radioRef.orderByChild('createdAt').on('value', (snapshot) => {
+                allRadios = [];
+                radioGrid.innerHTML = '';
+                
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    for (const key in data) {
+                        allRadios.unshift({
+                            id: key,
+                            ...data[key]
+                        });
+                    }
+                    renderRadios(allRadios);
+                } else {
+                    radioGrid.innerHTML = '<div class="no-results">Belum ada radio. Tambahkan dari panel admin!</div>';
+                }
+            }, (error) => {
+                console.error('Firebase error:', error);
+                radioGrid.innerHTML = '<div class="no-results">Gagal memuat radio. Periksa koneksi Firebase.</div>';
+            });
+        }
+
+        // ============================================
+        // RENDER RADIO
+        // ============================================
+        function renderRadios(radios) {
+            radioGrid.innerHTML = '';
+            
+            if (radios.length === 0) {
+                radioGrid.innerHTML = '<div class="no-results">Tidak ada radio yang cocok.</div>';
+                return;
+            }
+
+            radios.forEach(radio => {
+                const card = document.createElement('div');
+                card.className = 'radio-card';
+                card.innerHTML = `
+                    <div class="radio-icon">📻</div>
+                    <div class="radio-name">${escapeHtml(radio.name)}</div>
+                    <div class="radio-status">● Online</div>
+                `;
+                card.addEventListener('click', () => playRadio(radio));
+                radioGrid.appendChild(card);
+            });
+        }
+
+        // ============================================
+        // PLAY RADIO
+        // ============================================
+        function playRadio(radio) {
+            playerTitle.textContent = radio.name;
+            playerSubtitle.textContent = 'Sedang Diputar';
+            
+            // Listener count animation
+            let listeners = Math.floor(Math.random() * 500) + 50;
+            listenerCount.textContent = '● ' + listeners + ' pendengar';
+            
+            const listenerInterval = setInterval(() => {
+                listeners = Math.floor(Math.random() * 500) + 50;
+                listenerCount.textContent = '● ' + listeners + ' pendengar';
+            }, 5000);
+            
+            playerOverlay.dataset.intervalId = listenerInterval;
+            
+            // Play audio
+            audioPlayer.src = radio.url;
+            audioPlayer.play().catch(e => {
+                console.error('Playback error:', e);
+                alert('Gagal memutar stream. Cek link radio.');
+            });
+            
+            playerOverlay.classList.add('active');
+        }
+
+        // ============================================
+        // CLOSE PLAYER
+        // ============================================
+        function closePlayer() {
+            const intervalId = playerOverlay.dataset.intervalId;
+            if (intervalId) {
+                clearInterval(parseInt(intervalId));
+            }
+            
+            playerOverlay.classList.remove('active');
+            audioPlayer.pause();
+            audioPlayer.src = '';
+        }
+
+        // ============================================
+        // ADMIN FUNCTIONS
+        // ============================================
+        function openAdmin() {
+            adminOverlay.classList.add('active');
+            if (!isAdminAuthenticated) {
+                pinSection.style.display = 'block';
+                adminPanel.classList.remove('active');
+            }
+        }
+
+        function closeAdmin() {
+            adminOverlay.classList.remove('active');
+            pinInput.value = '';
+            pinError.style.display = 'none';
+        }
+
+        function verifyPin() {
+            if (pinInput.value === ADMIN_PIN) {
+                isAdminAuthenticated = true;
+                pinSection.style.display = 'none';
+                adminPanel.classList.add('active');
+                loadDeleteList();
+            } else {
+                pinError.style.display = 'block';
+                pinInput.value = '';
+                pinInput.focus();
+            }
+        }
+
+        function loadDeleteList() {
+            radioRef.on('value', (snapshot) => {
+                radioDeleteList.innerHTML = '';
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    for (const key in data) {
+                        const radio = data[key];
+                        const item = document.createElement('div');
+                        item.className = 'radio-delete-item';
+                        item.dataset.name = radio.name.toLowerCase();
+                        item.innerHTML = `
+                            <span>${escapeHtml(radio.name)}</span>
+                            <button class="btn-hapus" data-id="${key}">✕</button>
+                        `;
+                        item.querySelector('.btn-hapus').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm('Hapus radio "' + radio.name + '"?')) {
+                                deleteRadio(key);
+                            }
+                        });
+                        radioDeleteList.appendChild(item);
+                    }
+                }
+            });
+        }
+
+        function addRadio() {
+            const name = inputNama.value.trim();
+            const url = inputLink.value.trim();
+            
+            // Validasi nama
+            if (!name) {
+                alert('Nama radio harus diisi!');
+                inputNama.focus();
+                return;
+            }
+            
+            // Validasi URL
+            if (!url) {
+                alert('Link stream harus diisi!');
+                inputLink.focus();
+                return;
+            }
+            
+            // Validasi HTTPS
+            if (!url.startsWith('https://')) {
+                alert('Link harus menggunakan HTTPS!');
+                inputLink.focus();
+                return;
+            }
+            
+            // Validasi .mp3
+            if (!url.toLowerCase().includes('.mp3')) {
+                alert('Link harus format .mp3!');
+                inputLink.focus();
+                return;
+            }
+            
+            // Tambah ke Firebase
+            const newRadio = {
+                name: name,
+                url: url,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            radioRef.push(newRadio).then(() => {
+                inputNama.value = '';
+                inputLink.value = '';
+                alert('Radio berhasil ditambahkan!');
+            }).catch((error) => {
+                alert('Gagal menambah radio: ' + error.message);
+            });
+        }
+
+        function deleteRadio(id) {
+            radioRef.child(id).remove()
+                .then(() => {
+                    alert('Radio berhasil dihapus!');
+                })
+                .catch((error) => {
+                    alert('Gagal menghapus radio: ' + error.message);
+                });
+        }
+
+        function filterDeleteList(searchTerm) {
+            const items = radioDeleteList.querySelectorAll('.radio-delete-item');
+            items.forEach(item => {
+                const name = item.dataset.name;
+                if (name.includes(searchTerm.toLowerCase())) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // ============================================
+        // SEARCH FUNCTIONS
+        // ============================================
+        function toggleSearch() {
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                renderRadios(allRadios);
+            }
+        }
+
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (query === '') {
+                renderRadios(allRadios);
+                return;
+            }
+            
+            const filtered = allRadios.filter(radio => 
+                radio.name.toLowerCase().includes(query)
+            );
+            
+            renderRadios(filtered);
+        }
+
+        // ============================================
+        // UTILITY
+        // ============================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        logo.addEventListener('click', openAdmin);
+        
+        btnBatalPin.addEventListener('click', closeAdmin);
+        btnTutupAdmin.addEventListener('click', closeAdmin);
+        
+        btnVerifikasi.addEventListener('click', verifyPin);
+        pinInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verifyPin();
+        });
+        
+        btnTambah.addEventListener('click', addRadio);
+        
+        btnHapusRadio.addEventListener('click', () => {
+            deleteSection.classList.toggle('active');
+        });
+        
+        inputCariHapus.addEventListener('input', (e) => {
+            filterDeleteList(e.target.value);
+        });
+        
+        searchIcon.addEventListener('click', toggleSearch);
+        searchInput.addEventListener('input', handleSearch);
+        
+        playerOverlay.addEventListener('click', closePlayer);
+        
+        adminOverlay.addEventListener('click', (e) => {
+            if (e.target === adminOverlay) {
+                closeAdmin();
+            }
+        });
+
+        // ============================================
+        // INIT
+        // ============================================
+        loadRadios();
+    </script>
+</body>
+</html>
