@@ -1,107 +1,922 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Warung Chat</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    .message-box { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 8px; }
-    input, textarea { width: 100%; padding: 10px; margin: 5px 0; box-sizing: border-box; }
-    button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-    button:hover { background: #45a049; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sungai Kecil - Radio Streaming</title>
+<style>
+/* ========== BASE STYLES ========== */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: #D7CCC8;
+min-height: 100vh;
+}
+
+/* ========== HEADER ========== */
+.header {
+background-color: #5D4037;
+padding: 15px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: sticky;
+top: 0;
+z-index: 100;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+color: #E91E63;
+font-size: 1.8rem;
+font-weight: bold;
+cursor: pointer;
+transition: transform 0.3s, text-shadow 0.3s;
+user-select: none;
+}
+
+.logo:hover {
+transform: scale(1.05);
+text-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
+}
+
+.search-container {
+position: relative;
+display: flex;
+align-items: center;
+}
+
+.search-icon {
+width: 40px;
+height: 40px;
+background: white;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: transform 0.3s, box-shadow 0.3s;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon:hover {
+transform: scale(1.1);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.search-icon::before {
+content: '';
+width: 16px;
+height: 16px;
+border: 3px solid #5D4037;
+border-radius: 50%;
+}
+
+.search-icon::after {
+content: '';
+position: absolute;
+width: 8px;
+height: 3px;
+background: #5D4037;
+transform: rotate(45deg);
+bottom: 12px;
+right: 10px;
+}
+
+.search-input {
+position: absolute;
+right: 50px;
+width: 0;
+padding: 0;
+border: none;
+border-radius: 20px;
+background: white;
+transition: width 0.4s ease, padding 0.4s ease;
+font-size: 1rem;
+outline: none;
+}
+
+.search-input.active {
+width: 200px;
+padding: 10px 15px;
+}
+
+@media (min-width: 768px) {
+.search-input.active {
+width: 300px;
+}
+}
+
+/* ========== ADMIN POPUP & EXTREME MINIMALIST LOGIN ========== */
+.admin-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #1a1a1a; /* Layar penuh gelap misterius saat login */
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+cursor: text;
+}
+
+.admin-overlay.active {
+display: flex;
+}
+
+/* CSS Dinamis saat Admin SUDAH Log In */
+.admin-overlay.logged-in {
+background: rgba(0, 0, 0, 0.7);
+cursor: default;
+}
+
+.admin-popup {
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: all 0.3s ease;
+}
+
+.admin-overlay.logged-in .admin-popup {
+background: white;
+border-radius: 15px;
+padding: 30px;
+width: 90%;
+max-width: 500px;
+max-height: 90vh;
+height: auto;
+display: block;
+overflow-y: auto;
+position: relative;
+box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.pin-section {
+width: 100%;
+text-align: center;
+}
+
+/* Input PIN Rahasia: Tanpa border, tanpa background, hanya menyisakan kursor */
+.pin-input {
+background: transparent;
+border: none;
+outline: none;
+font-size: 3.5rem;
+text-align: center;
+width: 100%;
+max-width: 300px;
+color: #5D4037; 
+caret-color: #E91E63; /* Warna kursor berkedip yang mencolok */
+letter-spacing: 8px;
+}
+
+.admin-content {
+display: none;
+}
+
+.admin-content.active {
+display: block;
+}
+
+.admin-section {
+margin-bottom: 25px;
+padding: 20px;
+background: #f5f5f5;
+border-radius: 10px;
+}
+
+.admin-section h3 {
+color: #5D4037;
+margin-bottom: 15px;
+}
+
+.form-group {
+margin-bottom: 15px;
+}
+
+.form-group label {
+display: block;
+margin-bottom: 5px;
+color: #666;
+font-size: 0.9rem;
+}
+
+.form-group input {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 1rem;
+}
+
+.admin-btn {
+padding: 12px 25px;
+background: #E91E63;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+font-size: 1rem;
+width: 100%;
+transition: background 0.3s;
+}
+
+.admin-btn:hover {
+background: #C2185B;
+}
+
+.logout-btn {
+padding: 12px 25px;
+background: #5D4037;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+font-size: 1rem;
+width: 100%;
+margin-top: 15px;
+transition: background 0.3s;
+}
+
+.logout-btn:hover {
+background: #4E342E;
+}
+
+.delete-search-container {
+display: flex;
+gap: 10px;
+margin-bottom: 15px;
+}
+
+.delete-search-container input {
+flex: 1;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.radio-list-admin {
+max-height: 200px;
+overflow-y: auto;
+}
+
+.radio-item-admin {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 10px;
+background: white;
+border-radius: 5px;
+margin-bottom: 8px;
+cursor: pointer;
+transition: background 0.3s;
+}
+
+.radio-item-admin:hover {
+background: #fce4ec;
+}
+
+.radio-item-admin .delete-btn {
+color: #E91E63;
+cursor: pointer;
+font-size: 1.5rem;
+padding: 5px 10px;
+}
+
+.radio-item-admin .delete-btn:hover {
+background: #E91E63;
+color: white;
+border-radius: 5px;
+}
+
+.close-admin {
+position: absolute;
+top: 15px;
+right: 15px;
+font-size: 1.5rem;
+cursor: pointer;
+color: #666;
+display: none; /* Hanya muncul ketika sudah login admin */
+}
+
+.close-admin:hover {
+color: #E91E63;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+padding: 20px;
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.section-title {
+color: #5D4037;
+margin-bottom: 20px;
+font-size: 1.5rem;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.section-title::before {
+content: '📻';
+font-size: 1.5rem;
+}
+
+.radio-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 15px;
+}
+
+@media (min-width: 768px) {
+.radio-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+
+@media (min-width: 1024px) {
+.radio-grid {
+grid-template-columns: repeat(4, 1fr);
+}
+}
+
+.radio-card {
+background: white;
+border-radius: 12px;
+padding: 20px;
+cursor: pointer;
+transition: transform 0.3s, box-shadow 0.3s;
+text-align: center;
+}
+
+.radio-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.radio-icon {
+width: 60px;
+height: 60px;
+margin: 0 auto 15px;
+background: linear-gradient(135deg, #FF9800, #E91E63);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.5rem;
+}
+
+.radio-name {
+color: #5D4037;
+font-size: 1.1rem;
+font-weight: 600;
+margin-bottom: 5px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.radio-status {
+color: #8D6E63;
+font-size: 0.85rem;
+}
+
+.radio-status.online {
+color: #4CAF50;
+}
+
+.no-results {
+text-align: center;
+padding: 40px;
+color: #8D6E63;
+grid-column: 1 / -1;
+}
+
+.loading {
+text-align: center;
+padding: 40px;
+color: #5D4037;
+grid-column: 1 / -1;
+}
+
+.loading::after {
+content: 'Loading stations...';
+animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 0.5; }
+50% { opacity: 1; }
+}
+
+/* ========== PLAYER POPUP ========== */
+.player-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #FF9800;
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 2000;
+cursor: pointer;
+}
+
+.player-overlay.active {
+display: flex;
+}
+
+.player-content {
+text-align: center;
+color: white;
+cursor: default;
+padding: 20px;
+}
+
+.player-icon {
+width: 120px;
+height: 120px;
+margin: 0 auto 30px;
+background: white;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 3rem;
+animation: pulse-icon 2s infinite;
+}
+
+@keyframes pulse-icon {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.05); }
+}
+
+.player-title {
+font-size: 2rem;
+font-weight: bold;
+margin-bottom: 10px;
+}
+
+.player-subtitle {
+font-size: 1.2rem;
+margin-bottom: 30px;
+opacity: 0.9;
+}
+
+.blink-dots {
+display: flex;
+justify-content: center;
+gap: 10px;
+margin-bottom: 15px;
+}
+
+.blink-dot {
+width: 12px;
+height: 12px;
+background: white;
+border-radius: 50%;
+animation: blink 1s infinite;
+}
+
+.blink-dot:nth-child(2) {
+animation-delay: 0.3s;
+}
+
+.blink-dot:nth-child(3) {
+animation-delay: 0.6s;
+}
+
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.3; }
+}
+
+.listener-count {
+color: #4CAF50;
+font-size: 1.5rem;
+font-weight: bold;
+margin-bottom: 30px;
+}
+
+.listener-count::before {
+content: '👥 ';
+}
+
+/* ========== EQUALIZER ========== */
+.equalizer {
+display: flex;
+justify-content: center;
+align-items: flex-end;
+gap: 8px;
+height: 60px;
+margin-top: 20px;
+}
+
+.eq-bar {
+width: 12px;
+background: linear-gradient(to top, #E91E63, #FFEB3B, #4CAF50, #2196F3, #9C27B0);
+border-radius: 3px;
+animation: equalize 0.8s ease-in-out infinite;
+}
+
+.eq-bar:nth-child(1) { animation-duration: 0.6s; }
+.eq-bar:nth-child(2) { animation-duration: 0.8s; }
+.eq-bar:nth-child(3) { animation-duration: 0.5s; }
+.eq-bar:nth-child(4) { animation-duration: 0.9s; }
+.eq-bar:nth-child(5) { animation-duration: 0.7s; }
+.eq-bar:nth-child(6) { animation-duration: 0.6s; }
+.eq-bar:nth-child(7) { animation-duration: 0.8s; }
+
+@keyframes equalize {
+0%, 100% { height: 15px; }
+50% { height: 50px; }
+}
+
+.close-hint {
+margin-top: 40px;
+font-size: 1rem;
+opacity: 0.8;
+}
+
+/* ========== AUDIO ELEMENT ========== */
+#audio-player {
+display: none;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+background: #5D4037;
+color: white;
+text-align: center;
+padding: 20px;
+margin-top: 40px;
+}
+
+.footer p {
+opacity: 0.8;
+}
+</style>
 </head>
 <body>
-  <h1>Warung Chat</h1>
 
-  <h3>Tambah Data</h3>
-  <input type="text" id="nama" placeholder="Nama">
-  <input type="text" id="link" placeholder="Link">
-  <textarea id="keterangan" placeholder="Keterangan"></textarea>
-  <button onclick="simpanData()">Simpan</button>
+<!-- Header -->
+<header class="header">
+<div class="logo" id="logo">Sungai Kecil</div>
+<div class="search-container">
+<input type="text" class="search-input" id="search-input" placeholder="Search stations...">
+<div class="search-icon" id="search-icon"></div>
+</div>
+</header>
 
-  <h3>Daftar Data</h3>
-  <div id="daftarData"></div>
+<!-- Admin PIN Overlay -->
+<div class="admin-overlay" id="admin-overlay">
+<div class="admin-popup">
+<span class="close-admin" id="close-admin">✕</span>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from 
-      "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+<!-- PIN Section (Tanpa Tulisan & Tombol) -->
+<div class="pin-section" id="pin-section">
+<input type="password" class="pin-input" id="pin-input" maxlength="6">
+</div>
 
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBOxTg8T8ZElOwRsWhDLmYuIl2hZSjmVWI",
-      authDomain: "warung-chat.firebaseapp.com",
-      projectId: "warung-chat",
-      storageBucket: "warung-chat.firebasestorage.app",
-      messagingSenderId: "402956623508",
-      appId: "1:402956623508:web:5066f367cc6e454a1b1e81",
-      measurementId: "G-LDFJDL0ZSC"
-    };
+<!-- Admin Content -->
+<div class="admin-content" id="admin-content">
+<h2>⚙️ Admin Panel</h2>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+<!-- Add Radio Section -->
+<div class="admin-section">
+<h3>➕ Add New Radio Station</h3>
+<div class="form-group">
+<label>Station Name</label>
+<input type="text" id="new-radio-name" placeholder="e.g., Jazz FM">
+</div>
+<div class="form-group">
+<label>Stream URL</label>
+<input type="url" id="new-radio-url" placeholder="e.g., https://stream.example.com/live">
+</div>
+<button class="admin-btn" id="add-radio-btn">Add Station</button>
+</div>
 
-    // Fungsi Simpan Data
-    window.simpanData = async function() {
-      const nama = document.getElementById('nama').value;
-      const link = document.getElementById('link').value;
-      const keterangan = document.getElementById('keterangan').value;
+<!-- Delete Radio Section -->
+<div class="admin-section">
+<h3>🗑️ Delete Radio Station</h3>
+<div class="delete-search-container">
+<input type="text" id="delete-search" placeholder="Search to delete...">
+</div>
+<div class="radio-list-admin" id="radio-list-admin"></div>
+</div>
 
-      if (!nama || !link) {
-        alert('Nama dan Link wajib diisi!');
+<!-- Logout Button (Hanya terlihat saat sudah login) -->
+<button class="logout-btn" id="logout-btn">Logout Admin</button>
+</div>
+</div>
+</div>
+
+<!-- Main Content -->
+<main class="main-content">
+<h1 class="section-title">Available Radio Stations</h1>
+<div class="radio-grid" id="radio-grid">
+<div class="loading"></div>
+</div>
+</main>
+
+<!-- Player Overlay -->
+<div class="player-overlay" id="player-overlay">
+<div class="player-content">
+<div class="player-icon">📻</div>
+<h2 class="player-title" id="player-title">Station Name</h2>
+<p class="player-subtitle" id="player-subtitle">Now Playing</p>
+<div class="blink-dots">
+<div class="blink-dot"></div>
+<div class="blink-dot"></div>
+<div class="blink-dot"></div>
+</div>
+<div class="listener-count" id="listener-count">0 listeners</div>
+<div class="equalizer">
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+</div>
+<p class="close-hint">Tap anywhere to close</p>
+</div>
+</div>
+
+<audio id="audio-player"></audio>
+
+<footer class="footer">
+<p>© 2026 Sungai Kecil Radio - Stream your favorite stations</p>
+</footer>
+
+<!-- Firebase SDK v12 Modular CDN -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getDatabase, ref, onValue, push, remove, serverTimestamp, query, orderByChild } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+// Firebase Configuration yang kamu berikan
+const firebaseConfig = {
+apiKey: "AIzaSyBOxTg8T8ZElOwRsWhDLmYuIl2hZSjmVWI",
+authDomain: "warung-chat.firebaseapp.com",
+projectId: "warung-chat",
+storageBucket: "warung-chat.firebasestorage.app",
+messagingSenderId: "402956623508",
+appId: "1:402956623508:web:5066f367cc6e454a1b1e81",
+measurementId: "G-LDFJDL0ZSC"
+};
+
+// Inisialisasi Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+const radioRef = ref(database, 'radios');
+
+// ========== DOM ELEMENTS ==========
+const logo = document.getElementById('logo');
+const adminOverlay = document.getElementById('admin-overlay');
+const closeAdmin = document.getElementById('close-admin');
+const pinInput = document.getElementById('pin-input');
+const pinSection = document.getElementById('pin-section');
+const adminContent = document.getElementById('admin-content');
+const searchInput = document.getElementById('search-input');
+const searchIcon = document.getElementById('search-icon');
+const radioGrid = document.getElementById('radio-grid');
+const playerOverlay = document.getElementById('player-overlay');
+const audioPlayer = document.getElementById('audio-player');
+const playerTitle = document.getElementById('player-title');
+const playerSubtitle = document.getElementById('player-subtitle');
+const listenerCount = document.getElementById('listener-count');
+const addRadioBtn = document.getElementById('add-radio-btn');
+const deleteSearch = document.getElementById('delete-search');
+const radioListAdmin = document.getElementById('radio-list-admin');
+const newRadioName = document.getElementById('new-radio-name');
+const newRadioUrl = document.getElementById('new-radio-url');
+const logoutBtn = document.getElementById('logout-btn');
+
+// ========== CONSTANTS ==========
+const ADMIN_EMAIL = 'candumaneh@gmail.com';
+let allRadios = [];
+let isAuthReady = false;
+
+// ========== DETEKSI STATUS LOGIN (PERSISTENCE) ==========
+onAuthStateChanged(auth, (user) => {
+    isAuthReady = true;
+    if (user) {
+        // Jika sudah login, hilangkan input PIN, ubah background, tampilkan panel & tombol close
+        adminOverlay.classList.add('logged-in');
+        pinSection.style.display = 'none';
+        adminContent.classList.add('active');
+        closeAdmin.style.display = 'block';
+        loadAdminRadioList();
+    } else {
+        // Jika belum login, kembalikan ke mode layar penuh gelap gulita
+        adminOverlay.classList.remove('logged-in');
+        adminContent.classList.remove('active');
+        pinSection.style.display = 'block';
+        closeAdmin.style.display = 'none';
+        pinInput.value = '';
+    }
+});
+
+// ========== LOAD RADIOS FROM FIREBASE ==========
+function loadRadios() {
+    const q = query(radioRef, orderByChild('createdAt'));
+    onValue(q, (snapshot) => {
+        allRadios = [];
+        radioGrid.innerHTML = '';
+
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            for (const key in data) {
+                allRadios.unshift({
+                    id: key,
+                    ...data[key]
+                });
+            }
+            renderRadios(allRadios);
+        } else {
+            radioGrid.innerHTML = '<div class="no-results">No radio stations available.</div>';
+        }
+    }, (error) => {
+        console.error('Firebase database error:', error);
+    });
+}
+
+function renderRadios(radios) {
+    radioGrid.innerHTML = '';
+    if (radios.length === 0) {
+        radioGrid.innerHTML = '<div class="no-results">No stations found.</div>';
         return;
-      }
+    }
+    radios.forEach(radio => {
+        const card = document.createElement('div');
+        card.className = 'radio-card';
+        card.innerHTML = `<div class="radio-icon">📻</div><div class="radio-name">${escapeHtml(radio.name)}</div><div class="radio-status online">● Online</div>`;
+        card.addEventListener('click', () => playRadio(radio));
+        radioGrid.appendChild(card);
+    });
+}
 
-      try {
-        await addDoc(collection(db, "data"), {
-          nama: nama,
-          link: link,
-          keterangan: keterangan,
-          waktu: new Date().toISOString()
-        });
-        alert('Data berhasil disimpan!');
-        document.getElementById('nama').value = '';
-        document.getElementById('link').value = '';
-        document.getElementById('keterangan').value = '';
-        tampilkanData();
-      } catch (e) {
-        console.error("Error: ", e);
-        alert('Gagal menyimpan: ' + e.message);
-      }
+function playRadio(radio) {
+    playerTitle.textContent = radio.name;
+    playerSubtitle.textContent = 'Live Stream';
+    let listeners = Math.floor(Math.random() * 500) + 50;
+    listenerCount.textContent = `${listeners} listeners`;
+
+    audioPlayer.src = radio.url;
+    audioPlayer.play().catch(e => {
+        console.error('Playback error:', e);
+        alert('Unable to play stream.');
+    });
+    playerOverlay.classList.add('active');
+}
+
+function closePlayer() {
+    playerOverlay.classList.remove('active');
+    audioPlayer.pause();
+    audioPlayer.src = '';
+}
+
+// ========== VALIDASI & PROSES LOGIN (ENTER ONLY) ==========
+pinInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const typedPin = pinInput.value;
+        if (!typedPin) return;
+
+        // Kirim paket rahasia (Email + PIN sebagai password) langsung ke Google
+        signInWithEmailAndPassword(auth, ADMIN_EMAIL, typedPin)
+            .then(() => {
+                pinInput.value = '';
+            })
+            .catch((error) => {
+                console.error("Login Error:", error.message);
+                // Efek gagal: Kosongkan input & goyang/fokus kembali (tanpa teks error mengganggu)
+                pinInput.value = '';
+                pinInput.focus();
+            });
+    }
+});
+
+function loadAdminRadioList() {
+    onValue(radioRef, (snapshot) => {
+        radioListAdmin.innerHTML = '';
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            for (const key in data) {
+                const radio = data[key];
+                const item = document.createElement('div');
+                item.className = 'radio-item-admin';
+                item.innerHTML = `<span>${escapeHtml(radio.name)}</span><span class="delete-btn">✕</span>`;
+                item.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteRadio(key);
+                });
+                radioListAdmin.appendChild(item);
+            }
+        }
+    });
+}
+
+function addRadio() {
+    const name = newRadioName.value.trim();
+    const url = newRadioUrl.value.trim();
+    if (!name || !url) return alert('Fill all fields.');
+    
+    const newRadio = {
+        name: name,
+        url: url,
+        createdAt: serverTimestamp()
     };
 
-    // Fungsi Tampilkan Data
-    window.tampilkanData = async function() {
-      const snapshot = await getDocs(collection(db, "data"));
-      let html = '';
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        html += `
-          <div class="message-box">
-            <strong>${data.nama}</strong><br>
-            <a href="${data.link}" target="_blank">${data.link}</a><br>
-            <small>${data.keterangan || '-'}</small><br>
-            <button onclick="hapusData('${doc.id}')" style="background:#f44336; margin-top:5px;">Hapus</button>
-          </div>
-        `;
-      });
-      document.getElementById('daftarData').innerHTML = html || '<p>Belum ada data.</p>';
-    };
+    push(radioRef, newRadio).then(() => {
+        newRadioName.value = '';
+        newRadioUrl.value = '';
+    }).catch(err => alert(err.message));
+}
 
-    // Fungsi Hapus Data
-    window.hapusData = async function(id) {
-      if (confirm('Yakin hapus?')) {
-        await deleteDoc(doc(db, "data", id));
-        tampilkanData();
-      }
-    };
+function deleteRadio(id) {
+    if (confirm('Delete this station?')) {
+        const specificRadioRef = ref(database, `radios/${id}`);
+        remove(specificRadioRef).catch(err => alert(err.message));
+    }
+}
 
-    // Load data saat halaman dibuka
-    tampilkanData();
-  </script>
+// ========== SEARCH & UTILITIES ==========
+function handleSearch() {
+    const queryStr = searchInput.value.toLowerCase().trim();
+    if (queryStr === '') { renderRadios(allRadios); return; }
+    const filtered = allRadios.filter(radio => radio.name.toLowerCase().includes(queryStr));
+    renderRadios(filtered);
+}
+
+function toggleSearch() {
+    searchInput.classList.toggle('active');
+    if (searchInput.classList.contains('active')) { searchInput.focus(); } 
+    else { searchInput.value = ''; renderRadios(allRadios); }
+}
+
+function filterAdminList(searchTerm) {
+    const items = radioListAdmin.querySelectorAll('.radio-item-admin');
+    items.forEach(item => {
+        const name = item.querySelector('span').textContent.toLowerCase();
+        item.style.display = name.includes(searchTerm.toLowerCase()) ? 'flex' : 'none';
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ========== EVENT LISTENERS BINDING ==========
+logo.addEventListener('click', () => {
+    adminOverlay.classList.add('active');
+    // Jika belum login, langsung fokus ke input kosong biar kursornya berkedip
+    if (!auth.currentUser) {
+        setTimeout(() => pinInput.focus(), 50);
+    }
+});
+
+// Klik di mana saja pada overlay kosong untuk memaksa kursor tetap fokus
+adminOverlay.addEventListener('click', (e) => {
+    if (!auth.currentUser && e.target === adminOverlay || e.target === pinSection) {
+        pinInput.focus();
+    }
+});
+
+closeAdmin.addEventListener('click', () => adminOverlay.classList.remove('active'));
+logoutBtn.addEventListener('click', () => signOut(auth));
+addRadioBtn.addEventListener('click', addRadio);
+deleteSearch.addEventListener('input', (e) => filterAdminList(e.target.value));
+searchIcon.addEventListener('click', toggleSearch);
+searchInput.addEventListener('input', handleSearch);
+playerOverlay.addEventListener('click', closePlayer);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (auth.currentUser) adminOverlay.classList.remove('active'); // Hanya bisa di-escape kalau sudah login admin
+        closePlayer();
+    }
+});
+
+// Jalankan aplikasi
+loadRadios();
+</script>
 </body>
 </html>
