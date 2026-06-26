@@ -62,9 +62,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .radio-card { background: white; border-radius: 12px; padding: 15px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; gap: 12px; }
 .radio-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); }
 
-/* BINGKAI RASIO 16:9 */
 .radio-artwork { width: 100%; aspect-ratio: 16 / 9; background-color: #808080; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
-.radio-artwork img { width: 100%; height: 100%; object-fit: cover; display: none; } /* Tersembunyi default, akan muncul jika API berhasil */
+.radio-artwork img { width: 100%; height: 100%; object-fit: cover; display: none; }
 .radio-fallback-text { color: orange; font-size: 1.5rem; font-weight: 900; text-align: center; padding: 15px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); word-wrap: break-word; }
 
 .radio-info { text-align: center; }
@@ -97,7 +96,6 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <div class="search-container">
 <input type="text" class="search-input" id="search-input" placeholder="Search stations...">
 <div class="search-icon" id="search-icon"></div>
-</div>
 </header>
 
 <div class="admin-overlay" id="admin-overlay">
@@ -135,22 +133,20 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <button class="logout-btn" id="logout-btn">Logout Admin</button>
 </div>
 </div>
-</div>
 
 <main class="main-content">
 <h1 class="section-title">Available Radio Stations</h1>
 <div class="radio-grid" id="radio-grid">
 <div class="loading"></div>
-</div>
 </main>
 
 <div class="player-overlay" id="player-overlay">
 <div class="player-content">
 <div class="player-icon">📻</div>
 <h2 class="player-title" id="player-title">Station Name</h2>
-<p class="player-subtitle" id="player-subtitle">Now Playing</p>
-<div class="listener-count" id="listener-count">0 listeners</div>
-<p style="margin-top: 30px; opacity: 0.8;">Tap anywhere to close</p>
+<p class="player-subtitle" id="player-subtitle">Sedang Tayang</p>
+<div class="listener-count" id="listener-count">0 pendengar</div>
+<p style="margin-top: 30px; opacity: 0.8;">Ketuk di mana saja untuk menutup</p>
 </div>
 </div>
 
@@ -159,10 +155,10 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import { getDatabase, ref, onValue, push, remove, serverTimestamp, query, orderByChild } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+import { getDatabase, ref, onValue, push, remove, serverTimestamp, query, orderByChild, onDisconnect, set } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-// KONFIGURASI FIREBASE (URL DATABASE SUDAH DITAMBAHKAN)
+// KONFIGURASI FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyBOxTg8T8ZElOwRsWhDLmYuIl2hZSjmVWI",
     authDomain: "warung-chat.firebaseapp.com",
@@ -181,6 +177,8 @@ const radioRef = ref(database, 'radios');
 
 const ADMIN_EMAIL = 'candumaneh@gmail.com';
 let allRadios = [];
+let currentListenerRef = null;
+let listenerCountUnsub = null;
 
 // DOM Elements
 const logo = document.getElementById('logo'), adminOverlay = document.getElementById('admin-overlay');
@@ -219,11 +217,8 @@ pinInput.addEventListener('keypress', (e) => {
     }
 });
 
-// ========== ADD RADIO - VERSI DEBUG ==========
+// ========== ADD RADIO ==========
 function addRadio() {
-    console.log('1. Tombol diklik');
-    console.log('2. User login:', auth.currentUser?.email);
-    
     const name = newRadioName.value.trim();
     const url = newRadioUrl.value.trim();
     
@@ -232,7 +227,11 @@ function addRadio() {
         return;
     }
     
-    console.log('3. Data mau dikirim:', {name, url});
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        alert('URL harus mulai dengan http:// atau https://');
+        return;
+    }
+    
     addRadioBtn.textContent = 'Menambahkan...';
     addRadioBtn.disabled = true;
 
@@ -240,14 +239,13 @@ function addRadio() {
 
     push(radioRef, newRadio)
         .then(() => {
-            console.log('4. BERHASIL PUSH');
             alert('✅ Berhasil: Stasiun Radio "' + name + '" ditambahkan!');
             newRadioName.value = '';
             newRadioUrl.value = '';
         })
         .catch(err => {
-            console.log('4. GAGAL PUSH:', err.code, err.message);
-            alert('❌ Error: ' + err.message + '\n\n(Pastikan izin database terbuka atau URL database benar)');
+            console.error(err);
+            alert('❌ Error: ' + err.message);
         })
         .finally(() => {
             addRadioBtn.textContent = 'Add Station';
@@ -259,7 +257,10 @@ addRadioBtn.addEventListener('click', addRadio);
 // ========== FETCH ARTWORK DARI API RADIO ==========
 async function fetchArtwork(name, imgElement, fallbackElement) {
     try {
-        const response = await fetch(`https://de1.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(name)}&limit=1`);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        const response = await fetch(`https://de1.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(name)}&limit=1`, { signal: controller.signal });
+        clearTimeout(timeout);
         const data = await response.json();
         
         if (data && data.length > 0 && data[0].favicon) {
@@ -283,8 +284,9 @@ function loadRadios() {
         allRadios = [];
         if (snapshot.exists()) {
             snapshot.forEach((child) => {
-                allRadios.unshift({ id: child.key, ...child.val() });
+                allRadios.push({ id: child.key, ...child.val() });
             });
+            allRadios.reverse();
             renderRadios(allRadios);
         } else {
             radioGrid.innerHTML = '<div class="no-results">No radio stations available.</div>';
@@ -320,13 +322,55 @@ function renderRadios(radios) {
     });
 }
 
-// ========== LAIN-LAIN ==========
+// ========== PLAY RADIO - REALTIME LISTENER ==========
 function playRadio(radio) {
     playerTitle.textContent = radio.name;
-    listenerCount.textContent = `${Math.floor(Math.random() * 500) + 50} listeners`;
     audioPlayer.src = radio.url;
-    audioPlayer.play().catch(e => alert('Unable to play stream.'));
+    audioPlayer.load();
+    audioPlayer.play().catch(e => {
+        alert('Unable to play stream. Stasiun mungkin offline.');
+        stopRadio();
+    });
     playerOverlay.classList.add('active');
+
+    // Hapus listener lama
+    if (currentListenerRef) {
+        set(currentListenerRef, null);
+    }
+    if (listenerCountUnsub) {
+        listenerCountUnsub();
+    }
+
+    // Tambah listener baru
+    const listenerRef = ref(database, `listeners/${radio.id}/${auth.currentUser?.uid || Date.now()}`);
+    set(listenerRef, true);
+    currentListenerRef = listenerRef;
+
+    // Hapus otomatis kalau disconnect
+    onDisconnect(listenerRef).remove();
+
+    // Update count realtime
+    const countRef = ref(database, `listeners/${radio.id}`);
+    listenerCountUnsub = onValue(countRef, (snapshot) => {
+        const count = snapshot.exists() ? snapshot.size : 0;
+        listenerCount.textContent = `${count} pendengar`;
+    });
+}
+
+// ========== STOP RADIO ==========
+function stopRadio() {
+    playerOverlay.classList.remove('active');
+    audioPlayer.pause();
+    audioPlayer.src = '';
+    
+    if (currentListenerRef) {
+        set(currentListenerRef, null);
+        currentListenerRef = null;
+    }
+    if (listenerCountUnsub) {
+        listenerCountUnsub();
+        listenerCountUnsub = null;
+    }
 }
 
 function loadAdminRadioList() {
@@ -367,8 +411,12 @@ document.getElementById('delete-search').addEventListener('input', (e) => {
         item.style.display = item.querySelector('span').textContent.toLowerCase().includes(q) ? 'flex' : 'none';
     });
 });
-playerOverlay.addEventListener('click', () => { playerOverlay.classList.remove('active'); audioPlayer.pause(); audioPlayer.src = ''; });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if(auth.currentUser) adminOverlay.classList.remove('active'); playerOverlay.classList.remove('active'); audioPlayer.pause(); } });
+playerOverlay.addEventListener('click', stopRadio);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if(auth.currentUser) adminOverlay.classList.remove('active'); stopRadio(); } });
+audioPlayer.addEventListener('error', () => {
+    alert('Stream error. Stasiun mungkin offline.');
+    stopRadio();
+});
 
 loadRadios();
 </script>
