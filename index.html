@@ -166,7 +166,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 const firebaseConfig = {
     apiKey: "AIzaSyBOxTg8T8ZElOwRsWhDLmYuIl2hZSjmVWI",
     authDomain: "warung-chat.firebaseapp.com",
-    databaseURL: "https://warung-chat-default-rtdb.asia-southeast1.firebasedatabase.app", // << INI YANG BIKIN MACET SEBELUMNYA
+    databaseURL: "https://warung-chat-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "warung-chat",
     storageBucket: "warung-chat.firebasestorage.app",
     messagingSenderId: "402956623508",
@@ -219,8 +219,11 @@ pinInput.addEventListener('keypress', (e) => {
     }
 });
 
-// ========== ADD RADIO (BUG FIXED DENGAN TRY CATCH FINALLY) ==========
+// ========== ADD RADIO - VERSI DEBUG ==========
 function addRadio() {
+    console.log('1. Tombol diklik');
+    console.log('2. User login:', auth.currentUser?.email);
+    
     const name = newRadioName.value.trim();
     const url = newRadioUrl.value.trim();
     
@@ -229,7 +232,7 @@ function addRadio() {
         return;
     }
     
-    // Ganti teks tombol saat proses loading
+    console.log('3. Data mau dikirim:', {name, url});
     addRadioBtn.textContent = 'Menambahkan...';
     addRadioBtn.disabled = true;
 
@@ -237,16 +240,16 @@ function addRadio() {
 
     push(radioRef, newRadio)
         .then(() => {
+            console.log('4. BERHASIL PUSH');
             alert('✅ Berhasil: Stasiun Radio "' + name + '" ditambahkan!');
             newRadioName.value = '';
             newRadioUrl.value = '';
         })
         .catch(err => {
-            console.error(err);
+            console.log('4. GAGAL PUSH:', err.code, err.message);
             alert('❌ Error: ' + err.message + '\n\n(Pastikan izin database terbuka atau URL database benar)');
         })
         .finally(() => {
-            // Blok ini MEMAKSA tombol kembali ke keadaan awal, baik berhasil maupun gagal
             addRadioBtn.textContent = 'Add Station';
             addRadioBtn.disabled = false;
         });
@@ -336,7 +339,7 @@ function loadAdminRadioList() {
                 item.innerHTML = `<span>${escapeHtml(child.val().name)}</span><span class="delete-btn">✕</span>`;
                 item.querySelector('.delete-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if(confirm('Hapus stasiun ini?')) remove(ref(database, `radios/${child.key}`));
+                    if(confirm(`Hapus stasiun "${child.val().name}"?`)) remove(ref(database, `radios/${child.key}`));
                 });
                 radioListAdmin.appendChild(item);
             });
@@ -370,5 +373,4 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if(auth.
 loadRadios();
 </script>
 </body>
-</html>
-https://warung-chat-default-rtdb.asia-southeast1.firebasedatabase.app
+    </html>
