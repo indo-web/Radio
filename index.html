@@ -104,7 +104,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <header class="header">
 <div class="logo" id="logo">Sungai Kecil</div>
 <div class="search-container">
-<input type="text" class="search-input" id="search-input" placeholder="Search stations...">
+<!-- Ditambahkan autocomplete="off" agar email/riwayat tidak muncul -->
+<input type="text" class="search-input" id="search-input" placeholder="Search stations..." autocomplete="off" spellcheck="false">
 <div class="search-icon" id="search-icon"></div>
 </div>
 </header>
@@ -114,7 +115,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <span class="close-admin" id="close-admin">✕</span>
 
 <div class="pin-section" id="pin-section">
-<input type="password" class="pin-input" id="pin-input" maxlength="6">
+<!-- Ditambahkan autocomplete="new-password" agar pengelola sandi tidak ikut campur -->
+<input type="password" class="pin-input" id="pin-input" maxlength="6" autocomplete="new-password">
 </div>
 
 <div class="admin-content" id="admin-content">
@@ -124,11 +126,11 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <h3>➕ Add New Radio Station</h3>
 <div class="form-group">
 <label>Station Name</label>
-<input type="text" id="new-radio-name" placeholder="e.g., Prambors FM">
+<input type="text" id="new-radio-name" placeholder="e.g., Prambors FM" autocomplete="off">
 </div>
 <div class="form-group">
 <label>Stream URL</label>
-<input type="url" id="new-radio-url" placeholder="e.g., https://stream.example.com/live">
+<input type="url" id="new-radio-url" placeholder="e.g., https://stream.example.com/live" autocomplete="off">
 </div>
 <button class="admin-btn" id="add-radio-btn">Add Station</button>
 </div>
@@ -136,7 +138,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <div class="admin-section">
 <h3>🗑️ Delete Radio Station</h3>
 <div class="delete-search-container">
-<input type="text" id="delete-search" placeholder="Search to delete...">
+<!-- Ditambahkan autocomplete="off" -->
+<input type="text" id="delete-search" placeholder="Search to delete..." autocomplete="off">
 </div>
 <div class="radio-list-admin" id="radio-list-admin"></div>
 </div>
@@ -160,6 +163,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <p class="player-subtitle" id="player-subtitle">Now Playing</p>
 <div class="listener-count" id="listener-count">0 listener</div>
 
+<!-- PANEL INFORMASI DARI API -->
 <div class="player-details" id="player-details"></div>
 
 <p style="margin-top: 25px; opacity: 0.8; font-size: 0.9rem;">Tap anywhere to close</p>
