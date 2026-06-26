@@ -171,11 +171,12 @@
             border-radius: 20px;
         }
 
-        /* Station Grid */
+        /* Station Grid - CIRCULAR CARDS */
         .station-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            justify-items: center;
         }
 
         .station-card {
@@ -185,11 +186,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            width: 220px;
+            padding: 25px 20px;
+            text-align: center;
         }
 
         .station-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(233, 30, 99, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(233, 30, 99, 0.25);
         }
 
         .station-card::before {
@@ -209,17 +213,21 @@
             opacity: 0.1;
         }
 
+        /* CIRCULAR ARTWORK - Default Radio Icon */
         .station-artwork {
-            width: 180px;
-            height: 180px;
-            margin: 30px auto 20px;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
             border-radius: 50%;
             overflow: hidden;
             position: relative;
             z-index: 1;
             background: var(--secondary-dark);
             border: 4px solid var(--primary);
-            box-shadow: 0 0 30px rgba(233, 30, 99, 0.3);
+            box-shadow: 0 0 25px rgba(233, 30, 99, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .station-artwork img {
@@ -234,36 +242,38 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 50px;
             color: var(--primary);
+            background: linear-gradient(135deg, var(--secondary-dark), var(--bg-dark));
         }
 
         .station-info {
-            padding: 20px;
-            text-align: center;
             position: relative;
             z-index: 1;
         }
 
         .station-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--text-light);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .station-meta {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .station-tag {
             background: var(--secondary-dark);
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
@@ -278,6 +288,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            z-index: 2;
         }
 
         .status-badge.online {
@@ -306,20 +317,22 @@
         /* Loading State */
         .loading-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            justify-items: center;
         }
 
         .skeleton-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 30px;
+            padding: 25px 20px;
             text-align: center;
+            width: 220px;
         }
 
         .skeleton-artwork {
-            width: 180px;
-            height: 180px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             margin: 0 auto 20px;
             background: linear-gradient(90deg, var(--secondary-dark) 25%, var(--secondary) 50%, var(--secondary-dark) 75%);
@@ -346,7 +359,7 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Player Popup */
+        /* Player Popup - PROFESSIONAL */
         .player-popup {
             position: fixed;
             top: 0;
@@ -410,18 +423,20 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            z-index: 10;
         }
 
         .player-content {
             text-align: center;
             z-index: 1;
-            max-width: 600px;
+            max-width: 650px;
             padding: 20px;
         }
 
+        /* LARGE CIRCULAR ARTWORK */
         .player-artwork {
-            width: 280px;
-            height: 280px;
+            width: 260px;
+            height: 260px;
             border-radius: 50%;
             overflow: hidden;
             margin: 0 auto 30px;
@@ -442,9 +457,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 100px;
+            font-size: 90px;
             color: white;
-            background: rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
         }
 
         .visualizer {
@@ -502,22 +517,29 @@
             animation: pulse 1.5s infinite;
         }
 
+        /* INFO PANEL - PROFESSIONAL RADIO STYLE */
         .player-info-panel {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            margin-bottom: 25px;
         }
 
         .info-item {
             text-align: center;
+            padding: 10px;
+        }
+
+        .info-item:not(:last-child) {
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .info-label {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.7);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -525,13 +547,42 @@
         }
 
         .info-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: white;
         }
 
+        .info-value.empty {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* Second row of info */
+        .player-info-row2 {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 25px;
+        }
+
+        .info-compact {
+            text-align: center;
+        }
+
+        .info-compact .info-label {
+            font-size: 10px;
+            margin-bottom: 3px;
+        }
+
+        .info-compact .info-value {
+            font-size: 14px;
+        }
+
         .player-controls {
-            margin-top: 30px;
             display: flex;
             gap: 15px;
             justify-content: center;
@@ -539,13 +590,13 @@
         }
 
         .control-btn {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -559,11 +610,11 @@
         }
 
         .control-btn.play-btn {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             background: white;
             color: var(--accent-dark);
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .control-btn.play-btn:hover {
@@ -571,7 +622,7 @@
         }
 
         .control-btn.play-btn.playing {
-            animation: rotate 3s linear infinite;
+            animation: rotate 4s linear infinite;
         }
 
         @keyframes rotate {
@@ -668,6 +719,7 @@
             margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-muted);
+            text-align: left;
         }
 
         .form-input {
@@ -714,6 +766,10 @@
         /* Admin Content */
         .admin-content {
             display: none;
+        }
+
+        .admin-content.active {
+            display: block;
         }
 
         .admin-section {
@@ -841,6 +897,7 @@
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
+            grid-column: 1 / -1;
         }
 
         .no-results i {
@@ -885,12 +942,25 @@
             }
 
             .station-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
                 gap: 20px;
             }
 
+            .station-card {
+                width: 180px;
+            }
+
+            .station-artwork {
+                width: 120px;
+                height: 120px;
+            }
+
+            .station-artwork .fallback-icon {
+                font-size: 40px;
+            }
+
             .player-info-panel {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
                 padding: 20px;
             }
@@ -904,6 +974,14 @@
                 height: 200px;
             }
 
+            .player-artwork .fallback-icon {
+                font-size: 70px;
+            }
+
+            .player-info-row2 {
+                gap: 25px;
+            }
+
             .admin-panel {
                 width: 95%;
             }
@@ -911,15 +989,31 @@
 
         @media (max-width: 480px) {
             .station-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .station-card {
+                width: 100%;
+                max-width: 180px;
             }
 
             .player-info-panel {
                 grid-template-columns: 1fr;
             }
+
+            .info-item:not(:last-child) {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .player-info-row2 {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
 
-        /* Notification Toast */
+        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -1025,7 +1119,7 @@
         </div>
     </main>
 
-    <!-- Player Popup -->
+    <!-- Player Popup - PROFESSIONAL -->
     <div class="player-popup" id="playerPopup" onclick="closePlayer(event)">
         <div class="player-bg-animation">
             <div class="wave"></div>
@@ -1061,6 +1155,7 @@
                 <span id="nowPlayingText">Now Playing</span>
             </div>
             
+            <!-- Info Panel Row 1 -->
             <div class="player-info-panel">
                 <div class="info-item">
                     <div class="info-label">Country</div>
@@ -1071,20 +1166,28 @@
                     <div class="info-value" id="infoGenre">-</div>
                 </div>
                 <div class="info-item">
+                    <div class="info-label">Language</div>
+                    <div class="info-value" id="infoLanguage">-</div>
+                </div>
+            </div>
+            
+            <!-- Info Panel Row 2 -->
+            <div class="player-info-row2">
+                <div class="info-compact">
                     <div class="info-label">Bitrate</div>
                     <div class="info-value" id="infoBitrate">-</div>
                 </div>
-                <div class="info-item">
+                <div class="info-compact">
                     <div class="info-label">Codec</div>
                     <div class="info-value" id="infoCodec">-</div>
                 </div>
-                <div class="info-item">
+                <div class="info-compact">
                     <div class="info-label">Listeners</div>
                     <div class="info-value" id="infoListeners">-</div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Status</div>
-                    <div class="info-value" id="infoStatus">-</div>
+                <div class="info-compact">
+                    <div class="info-label">Votes</div>
+                    <div class="info-value" id="infoVotes">-</div>
                 </div>
             </div>
             
@@ -1188,16 +1291,22 @@
     <!-- Audio Element -->
     <audio id="audioPlayer" crossorigin="anonymous"></audio>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
     <script>
-        // Firebase Configuration
+        // Firebase Configuration - REAL DATA
         const firebaseConfig = {
             apiKey: "AIzaSyBOxTg8T8ZElOwRsWhDLmYuIl2hZSjmVWI",
             authDomain: "warung-chat.firebaseapp.com",
             databaseURL: "https://warung-chat-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "warung-chat",
-            storageBucket: "warung-chat.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
+            storageBucket: "warung-chat.firebasestorage.app",
+            messagingSenderId: "402956623508",
+            appId: "1:402956623508:web:5066f367cc6e454a1b1e81",
+            measurementId: "G-LDFJDL0ZSC"
         };
 
         // Initialize Firebase
@@ -1214,7 +1323,7 @@
         let adminStations = [];
         let isAuthenticated = false;
 
-        // Radio-Browser API Base URL
+        // Radio-Browser API Base URL - REAL API
         const API_BASE = 'https://de1.api.radio-browser.info/json';
 
         // Load stations on page load
@@ -1236,35 +1345,24 @@
             });
         }
 
-        // Load radio stations from Radio-Browser API
+        // Load radio stations from Radio-Browser API - NO DUMMY DATA
         async function loadStations() {
             const loadingGrid = document.getElementById('loadingGrid');
             const stationGrid = document.getElementById('stationGrid');
             const noResults = document.getElementById('noResults');
 
             try {
-                // First, load custom stations from Firebase
-                const customStationsSnapshot = await database.ref('stations').once('value');
-                const customStations = customStationsSnapshot.val() || {};
-
-                // Then fetch popular stations from Radio-Browser API
+                // Fetch top-voted stations from Radio-Browser API - REAL DATA
                 const response = await fetch(`${API_BASE}/stations/topvote/100`);
                 if (!response.ok) throw new Error('Failed to fetch stations');
                 
                 let stations = await response.json();
 
-                // Combine custom stations with API stations
-                const customStationsArray = Object.values(customStations).map((station, index) => ({
-                    ...station,
-                    stationuuid: `custom-${index}`,
-                    isCustom: true,
-                    votes: 9999 // Put custom stations at top
-                }));
-
-                stations = [...customStationsArray, ...stations];
-
                 // Filter out stations without stream URLs
                 stations = stations.filter(s => s.url_resolved && s.url_resolved.trim() !== '');
+
+                // Limit to reasonable number for display
+                stations = stations.slice(0, 50);
 
                 renderStations(stations);
 
@@ -1286,27 +1384,39 @@
             }
         }
 
-        // Render stations to the grid
+        // Render stations to the grid - CIRCULAR CARDS
         function renderStations(stations) {
             const stationGrid = document.getElementById('stationGrid');
             const stationCount = document.getElementById('stationCount');
             
+            // Clear loading state
             stationGrid.innerHTML = '';
             stationCount.textContent = `${stations.length} stations`;
 
-            stations.forEach((station, index) => {
+            if (stations.length === 0) {
+                stationGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-radio"></i>
+                        <h3>No stations available</h3>
+                        <p>Check back later for radio stations</p>
+                    </div>
+                `;
+                return;
+            }
+
+            stations.forEach((station) => {
                 const card = createStationCard(station);
                 stationGrid.appendChild(card);
             });
         }
 
-        // Create a station card element
+        // Create a station card element - CIRCULAR FORMAT
         function createStationCard(station) {
             const card = document.createElement('div');
             card.className = 'station-card';
             card.onclick = () => playStation(station);
 
-            const hasImage = station.favicon && station.favicon.trim() !== '';
+            const hasImage = station.favicon && station.favicon.trim() !== '' && station.favicon.startsWith('http');
             const artworkUrl = hasImage ? station.favicon : null;
 
             card.innerHTML = `
@@ -1323,17 +1433,17 @@
                     </div>
                 </div>
                 <div class="station-info">
-                    <h3 class="station-name">${station.name}</h3>
+                    <h3 class="station-name">${escapeHtml(station.name)}</h3>
                     <div class="station-meta">
-                        ${station.country ? `<span class="station-tag">${station.country}</span>` : ''}
-                        ${station.tags ? `<span class="station-tag">${station.tags.split(',')[0]}</span>` : ''}
+                        ${station.country ? `<span class="station-tag">${escapeHtml(station.country)}</span>` : ''}
+                        ${station.tags ? `<span class="station-tag">${escapeHtml(station.tags.split(',')[0])}</span>` : ''}
                         ${station.bitrate ? `<span class="station-tag">${station.bitrate} kbps</span>` : ''}
                     </div>
                 </div>
             `;
 
-            // Cache the image
-            if (hasImage && !cachedImages[station.stationuuid]) {
+            // Preload image for better UX
+            if (hasImage) {
                 const img = new Image();
                 img.src = artworkUrl;
                 img.onload = () => {
@@ -1347,16 +1457,18 @@
             return card;
         }
 
-        // Play a radio station
+        // Play a radio station - PROFESSIONAL POPUP
         function playStation(station) {
             currentStation = station;
             const audio = document.getElementById('audioPlayer');
             const popup = document.getElementById('playerPopup');
 
-            // Update popup content
+            // Update station name
             document.getElementById('playerStationName').textContent = station.name;
+            document.getElementById('nowPlayingText').textContent = station.name;
             
-            const hasImage = station.favicon && station.favicon.trim() !== '';
+            // Update artwork - CIRCULAR with fallback
+            const hasImage = station.favicon && station.favicon.trim() !== '' && station.favicon.startsWith('http');
             const imgElement = document.getElementById('playerArtwork');
             const fallbackIcon = document.getElementById('playerFallback');
             
@@ -1369,14 +1481,31 @@
                 fallbackIcon.style.display = 'flex';
             }
 
-            // Update info panel
-            document.getElementById('infoCountry').textContent = station.country || 'Unknown';
-            document.getElementById('infoGenre').textContent = station.tags ? station.tags.split(',')[0] : 'Various';
-            document.getElementById('infoBitrate').textContent = station.bitrate ? `${station.bitrate} kbps` : 'Unknown';
-            document.getElementById('infoCodec').textContent = station.codec || 'Unknown';
-            document.getElementById('infoListeners').textContent = Math.floor(Math.random() * 450) + 50;
-            document.getElementById('infoStatus').textContent = 'LIVE';
-            document.getElementById('nowPlayingText').textContent = station.name;
+            // Update ALL info panel fields - with fallback values
+            // Row 1
+            document.getElementById('infoCountry').textContent = station.country || '-';
+            document.getElementById('infoCountry').className = station.country ? 'info-value' : 'info-value empty';
+            
+            const genre = station.tags ? station.tags.split(',')[0].trim() : null;
+            document.getElementById('infoGenre').textContent = genre || '-';
+            document.getElementById('infoGenre').className = genre ? 'info-value' : 'info-value empty';
+            
+            document.getElementById('infoLanguage').textContent = station.language || '-';
+            document.getElementById('infoLanguage').className = station.language ? 'info-value' : 'info-value empty';
+
+            // Row 2
+            document.getElementById('infoBitrate').textContent = station.bitrate ? `${station.bitrate} kbps` : '-';
+            document.getElementById('infoBitrate').className = station.bitrate ? 'info-value' : 'info-value empty';
+            
+            document.getElementById('infoCodec').textContent = station.codec || '-';
+            document.getElementById('infoCodec').className = station.codec ? 'info-value' : 'info-value empty';
+            
+            // Random listeners for demo (in real app, this would come from API)
+            const listeners = Math.floor(Math.random() * 450) + 50;
+            document.getElementById('infoListeners').textContent = listeners.toLocaleString();
+            
+            document.getElementById('infoVotes').textContent = station.votes ? station.votes.toLocaleString() : '-';
+            document.getElementById('infoVotes').className = station.votes ? 'info-value' : 'info-value empty';
 
             // Play the stream
             audio.src = station.url_resolved;
@@ -1403,7 +1532,9 @@
             
             popup.classList.remove('active');
             audio.pause();
+            audio.src = '';
             isPlaying = false;
+            updatePlayPauseButton();
         }
 
         // Toggle play/pause
@@ -1460,7 +1591,7 @@
                 const meta = card.querySelector('.station-meta').textContent.toLowerCase();
                 
                 if (name.includes(searchTerm) || meta.includes(searchTerm)) {
-                    card.style.display = 'block';
+                    card.style.display = '';
                     visibleCount++;
                 } else {
                     card.style.display = 'none';
@@ -1474,6 +1605,9 @@
         // Admin Panel Functions
         function openAdminPanel() {
             document.getElementById('adminOverlay').classList.add('active');
+            if (!isAuthenticated) {
+                setTimeout(() => document.getElementById('adminPin').focus(), 100);
+            }
         }
 
         function closeAdminPanel(event) {
@@ -1485,12 +1619,12 @@
 
         function showLoginForm() {
             document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('adminContent').style.display = 'none';
+            document.getElementById('adminContent').classList.remove('active');
         }
 
         function showAdminContent() {
             document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('adminContent').style.display = 'block';
+            document.getElementById('adminContent').classList.add('active');
             loadAdminStations();
         }
 
@@ -1507,7 +1641,6 @@
             }
 
             try {
-                // Sign in with email and password (PIN as password)
                 await auth.signInWithEmailAndPassword(email, pin);
                 errorMsg.style.display = 'none';
                 showToast('Login successful!', 'success');
@@ -1550,7 +1683,7 @@
             list.innerHTML = '';
 
             if (stations.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No custom stations added yet.</p>';
+                list.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">No custom stations added yet. Add one above!</p>';
                 return;
             }
 
@@ -1559,8 +1692,8 @@
                 item.className = 'station-list-item';
                 item.innerHTML = `
                     <div class="station-list-info">
-                        <div class="station-list-name">${station.name}</div>
-                        <div class="station-list-url">${station.url}</div>
+                        <div class="station-list-name">${escapeHtml(station.name)}</div>
+                        <div class="station-list-url">${escapeHtml(station.url)}</div>
                     </div>
                     <button class="delete-btn" onclick="deleteStation('${station.id}')">
                         <i class="fas fa-trash"></i> Delete
@@ -1608,7 +1741,6 @@
                 
                 showToast('Station added successfully!', 'success');
                 loadAdminStations();
-                loadStations(); // Reload main grid
             } catch (error) {
                 console.error('Error adding station:', error);
                 showToast('Failed to add station', 'error');
@@ -1625,7 +1757,6 @@
                 await database.ref(`stations/${id}`).remove();
                 showToast('Station deleted successfully!', 'success');
                 loadAdminStations();
-                loadStations(); // Reload main grid
             } catch (error) {
                 console.error('Error deleting station:', error);
                 showToast('Failed to delete station', 'error');
@@ -1640,6 +1771,14 @@
             } catch (_) {
                 return false;
             }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Show toast notification
@@ -1686,7 +1825,7 @@
         // Handle audio errors
         document.getElementById('audioPlayer').addEventListener('error', (e) => {
             console.error('Audio error:', e);
-            showToast('Stream connection failed. Trying another source...', 'error');
+            showToast('Stream connection failed. Please try again.', 'error');
             
             // Try with original URL if resolved URL fails
             if (currentStation && currentStation.url) {
@@ -1695,7 +1834,7 @@
             }
         });
 
-        // Handle audio ended (rare for streams but handle it)
+        // Handle audio ended
         document.getElementById('audioPlayer').addEventListener('ended', () => {
             isPlaying = false;
             updatePlayPauseButton();
