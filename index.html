@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sungai Kecil - Radio Streaming</title>
     <style>
-        /* ========== BASE STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +17,7 @@
             min-height: 100vh;
         }
 
-        /* ========== HEADER ========== */
+        /* Header */
         .header {
             background-color: #5D4037;
             padding: 15px 20px;
@@ -45,15 +44,31 @@
             text-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
         }
 
-        .search-container {
+        .search-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .search-icon {
-            width: 40px;
-            height: 40px;
+        .search-input-header {
+            width: 0;
+            padding: 0;
+            border: none;
+            border-radius: 20px;
+            background: white;
+            transition: all 0.4s ease;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-input-header.active {
+            width: 200px;
+            padding: 10px 15px;
+        }
+
+        .search-icon-large {
+            width: 45px;
+            height: 45px;
             background: white;
             border-radius: 50%;
             display: flex;
@@ -61,58 +76,34 @@
             justify-content: center;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            margin-left: 10px;
         }
 
-        .search-icon:hover {
+        .search-icon-large:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .search-icon::before {
+        .search-icon-large::before {
             content: '';
-            width: 16px;
-            height: 16px;
-            border: 3px solid #5D4037;
+            width: 18px;
+            height: 18px;
+            border: 4px solid #5D4037;
             border-radius: 50%;
         }
 
-        .search-icon::after {
+        .search-icon-large::after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 3px;
+            width: 10px;
+            height: 4px;
             background: #5D4037;
             transform: rotate(45deg);
-            bottom: 12px;
-            right: 10px;
+            margin-top: 12px;
+            margin-left: 14px;
         }
 
-        .search-input {
-            position: absolute;
-            right: 50px;
-            width: 0;
-            padding: 0;
-            border: none;
-            border-radius: 20px;
-            background: white;
-            transition: width 0.4s ease, padding 0.4s ease;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .search-input.active {
-            width: 200px;
-            padding: 10px 15px;
-        }
-
-        @media (min-width: 768px) {
-            .search-input.active {
-                width: 300px;
-            }
-        }
-
-        /* ========== ADMIN POPUP ========== */
+        /* Admin Overlay */
         .admin-overlay {
             position: fixed;
             top: 0;
@@ -138,6 +129,7 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
         }
 
         .admin-popup h2 {
@@ -146,61 +138,85 @@
             text-align: center;
         }
 
-        .pin-section {
+        .pin-verification {
             text-align: center;
         }
 
         .pin-input {
-            padding: 12px;
-            font-size: 1.2rem;
+            padding: 15px;
+            font-size: 1.5rem;
             border: 2px solid #5D4037;
-            border-radius: 8px;
-            width: 150px;
+            border-radius: 10px;
+            width: 180px;
             text-align: center;
-            letter-spacing: 5px;
-            margin-bottom: 10px;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
         }
 
-        .pin-btn {
-            padding: 10px 30px;
-            background: #5D4037;
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn-batal {
+            padding: 12px 25px;
+            background: #9E9E9E;
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
         }
 
-        .pin-btn:hover {
-            background: #4E342E;
+        .btn-kirim {
+            padding: 12px 25px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-kirim:hover {
+            background: #388E3C;
+        }
+
+        .btn-batal:hover {
+            background: #757575;
         }
 
         .pin-error {
             color: #E91E63;
-            font-size: 0.9rem;
             margin-top: 10px;
             display: none;
+            font-weight: bold;
         }
 
-        .admin-content {
+        .admin-panel {
             display: none;
         }
 
-        .admin-content.active {
+        .admin-panel.active {
             display: block;
         }
 
         .admin-section {
             margin-bottom: 25px;
             padding: 20px;
-            background: #f5f5f5;
+            background: #FAFAFA;
             border-radius: 10px;
+            border: 1px solid #E0E0E0;
         }
 
         .admin-section h3 {
             color: #5D4037;
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .form-group {
@@ -211,94 +227,70 @@
             display: block;
             margin-bottom: 5px;
             color: #666;
-            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
             font-size: 1rem;
+            transition: border-color 0.3s;
         }
 
-        .admin-btn {
-            padding: 12px 25px;
-            background: #E91E63;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            width: 100%;
-            transition: background 0.3s;
+        .form-group input:focus {
+            outline: none;
+            border-color: #5D4037;
         }
 
-        .admin-btn:hover {
-            background: #C2185B;
+        .hint {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
         }
 
-        .delete-search-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .delete-search-container input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .radio-list-admin {
+        .radio-delete-list {
             max-height: 200px;
             overflow-y: auto;
+            margin-top: 10px;
         }
 
-        .radio-item-admin {
+        .radio-delete-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
+            padding: 12px;
             background: white;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .radio-delete-item.hidden {
+            display: none;
+        }
+
+        .radio-delete-item span {
+            flex: 1;
+            color: #333;
+        }
+
+        .btn-hapus {
+            color: #F44336;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .radio-item-admin:hover {
-            background: #fce4ec;
-        }
-
-        .radio-item-admin .delete-btn {
-            color: #E91E63;
-            cursor: pointer;
-            font-size: 1.5rem;
-            padding: 5px 10px;
-        }
-
-        .radio-item-admin .delete-btn:hover {
-            background: #E91E63;
-            color: white;
+            font-size: 1.3rem;
+            padding: 5px 12px;
             border-radius: 5px;
+            transition: all 0.3s;
         }
 
-        .close-admin {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
+        .btn-hapus:hover {
+            background: #F44336;
+            color: white;
         }
 
-        .close-admin:hover {
-            color: #E91E63;
-        }
-
-        /* ========== MAIN CONTENT ========== */
+        /* Main Content */
         .main-content {
             padding: 20px;
             max-width: 1200px;
@@ -307,676 +299,3 @@
 
         .section-title {
             color: #5D4037;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title::before {
-            content: '📻';
-            font-size: 1.5rem;
-        }
-
-        .radio-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        @media (min-width: 768px) {
-            .radio-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .radio-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .radio-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-        }
-
-        .radio-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .radio-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: linear-gradient(135deg, #FF9800, #E91E63);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .radio-name {
-            color: #5D4037;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .radio-status {
-            color: #8D6E63;
-            font-size: 0.85rem;
-        }
-
-        .radio-status.online {
-            color: #4CAF50;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #8D6E63;
-            grid-column: 1 / -1;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #5D4037;
-            grid-column: 1 / -1;
-        }
-
-        .loading::after {
-            content: 'Loading stations...';
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* ========== PLAYER POPUP ========== */
-        .player-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #FF9800;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            cursor: pointer;
-        }
-
-        .player-overlay.active {
-            display: flex;
-        }
-
-        .player-content {
-            text-align: center;
-            color: white;
-            cursor: default;
-            padding: 20px;
-        }
-
-        .player-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 30px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            animation: pulse-icon 2s infinite;
-        }
-
-        @keyframes pulse-icon {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .player-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .player-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .blink-dots {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .blink-dot {
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
-
-        .blink-dot:nth-child(2) {
-            animation-delay: 0.3s;
-        }
-
-        .blink-dot:nth-child(3) {
-            animation-delay: 0.6s;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .listener-count {
-            color: #4CAF50;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-
-        .listener-count::before {
-            content: '👥 ';
-        }
-
-        /* ========== EQUALIZER ========== */
-        .equalizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 8px;
-            height: 60px;
-            margin-top: 20px;
-        }
-
-        .eq-bar {
-            width: 12px;
-            background: linear-gradient(to top, #E91E63, #FFEB3B, #4CAF50, #2196F3, #9C27B0);
-            border-radius: 3px;
-            animation: equalize 0.8s ease-in-out infinite;
-        }
-
-        .eq-bar:nth-child(1) { animation-duration: 0.6s; }
-        .eq-bar:nth-child(2) { animation-duration: 0.8s; }
-        .eq-bar:nth-child(3) { animation-duration: 0.5s; }
-        .eq-bar:nth-child(4) { animation-duration: 0.9s; }
-        .eq-bar:nth-child(5) { animation-duration: 0.7s; }
-        .eq-bar:nth-child(6) { animation-duration: 0.6s; }
-        .eq-bar:nth-child(7) { animation-duration: 0.8s; }
-
-        @keyframes equalize {
-            0%, 100% { height: 15px; }
-            50% { height: 50px; }
-        }
-
-        .close-hint {
-            margin-top: 40px;
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        /* ========== AUDIO ELEMENT ========== */
-        #audio-player {
-            display: none;
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            background: #5D4037;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-        }
-
-        .footer p {
-            opacity: 0.8;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo" id="logo">Sungai Kecil</div>
-        <div class="search-container">
-            <input type="text" class="search-input" id="search-input" placeholder="Search stations...">
-            <div class="search-icon" id="search-icon"></div>
-        </div>
-    </header>
-
-    <!-- Admin PIN Overlay -->
-    <div class="admin-overlay" id="admin-overlay">
-        <div class="admin-popup" style="position: relative;">
-            <span class="close-admin" id="close-admin">✕</span>
-            
-            <!-- PIN Section -->
-            <div class="pin-section" id="pin-section">
-                <h2>🔐 Admin Access</h2>
-                <input type="password" class="pin-input" id="pin-input" maxlength="6" placeholder="Enter PIN">
-                <br>
-                <button class="pin-btn" id="pin-btn">Verify</button>
-                <p class="pin-error" id="pin-error">Incorrect PIN. Please try again.</p>
-            </div>
-            
-            <!-- Admin Content -->
-            <div class="admin-content" id="admin-content">
-                <h2>⚙️ Admin Panel</h2>
-                
-                <!-- Add Radio Section -->
-                <div class="admin-section">
-                    <h3>➕ Add New Radio Station</h3>
-                    <div class="form-group">
-                        <label>Station Name</label>
-                        <input type="text" id="new-radio-name" placeholder="e.g., Jazz FM">
-                    </div>
-                    <div class="form-group">
-                        <label>Stream URL</label>
-                        <input type="url" id="new-radio-url" placeholder="e.g., https://stream.example.com/live">
-                    </div>
-                    <button class="admin-btn" id="add-radio-btn">Add Station</button>
-                </div>
-                
-                <!-- Delete Radio Section -->
-                <div class="admin-section">
-                    <h3>🗑️ Delete Radio Station</h3>
-                    <div class="delete-search-container">
-                        <input type="text" id="delete-search" placeholder="Search to delete...">
-                    </div>
-                    <div class="radio-list-admin" id="radio-list-admin">
-                        <!-- Radio items will be populated here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <h1 class="section-title">Available Radio Stations</h1>
-        <div class="radio-grid" id="radio-grid">
-            <div class="loading"></div>
-        </div>
-    </main>
-
-    <!-- Player Overlay -->
-    <div class="player-overlay" id="player-overlay">
-        <div class="player-content">
-            <div class="player-icon">📻</div>
-            <h2 class="player-title" id="player-title">Station Name</h2>
-            <p class="player-subtitle" id="player-subtitle">Now Playing</p>
-            <div class="blink-dots">
-                <div class="blink-dot"></div>
-                <div class="blink-dot"></div>
-                <div class="blink-dot"></div>
-            </div>
-            <div class="listener-count" id="listener-count">0 listeners</div>
-            <div class="equalizer">
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-            </div>
-            <p class="close-hint">Tap anywhere to close</p>
-        </div>
-    </div>
-
-    <!-- Audio Player -->
-    <audio id="audio-player" controls></audio>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2024 Sungai Kecil Radio - Stream your favorite stations</p>
-    </footer>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <script>
-        // ========== FIREBASE CONFIGURATION ==========
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const radioRef = database.ref('radios');
-
-        // ========== DOM ELEMENTS ==========
-        const logo = document.getElementById('logo');
-        const adminOverlay = document.getElementById('admin-overlay');
-        const closeAdmin = document.getElementById('close-admin');
-        const pinInput = document.getElementById('pin-input');
-        const pinBtn = document.getElementById('pin-btn');
-        const pinError = document.getElementById('pin-error');
-        const pinSection = document.getElementById('pin-section');
-        const adminContent = document.getElementById('admin-content');
-        const searchInput = document.getElementById('search-input');
-        const searchIcon = document.getElementById('search-icon');
-        const radioGrid = document.getElementById('radio-grid');
-        const playerOverlay = document.getElementById('player-overlay');
-        const audioPlayer = document.getElementById('audio-player');
-        const playerTitle = document.getElementById('player-title');
-        const playerSubtitle = document.getElementById('player-subtitle');
-        const listenerCount = document.getElementById('listener-count');
-        const addRadioBtn = document.getElementById('add-radio-btn');
-        const deleteSearch = document.getElementById('delete-search');
-        const radioListAdmin = document.getElementById('radio-list-admin');
-        const newRadioName = document.getElementById('new-radio-name');
-        const newRadioUrl = document.getElementById('new-radio-url');
-
-        // ========== CONSTANTS ==========
-        const ADMIN_PIN = '541268';
-        let allRadios = [];
-        let isAdminAuthenticated = false;
-
-        // ========== INITIALIZATION ==========
-        function init() {
-            loadRadios();
-            setupEventListeners();
-        }
-
-        // ========== LOAD RADIOS FROM FIREBASE ==========
-        function loadRadios() {
-            radioRef.orderByChild('createdAt').on('value', (snapshot) => {
-                allRadios = [];
-                radioGrid.innerHTML = '';
-                
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    for (const key in data) {
-                        allRadios.unshift({
-                            id: key,
-                            ...data[key]
-                        });
-                    }
-                    renderRadios(allRadios);
-                } else {
-                    radioGrid.innerHTML = '<div class="no-results">No radio stations available. Add some from the admin panel!</div>';
-                }
-            }, (error) => {
-                console.error('Firebase error:', error);
-                radioGrid.innerHTML = '<div class="no-results">Error loading stations. Please check your Firebase configuration.</div>';
-            });
-        }
-
-        // ========== RENDER RADIOS ==========
-        function renderRadios(radios) {
-            radioGrid.innerHTML = '';
-            
-            if (radios.length === 0) {
-                radioGrid.innerHTML = '<div class="no-results">No stations found matching your search.</div>';
-                return;
-            }
-
-            radios.forEach(radio => {
-                const card = document.createElement('div');
-                card.className = 'radio-card';
-                card.innerHTML = `
-                    <div class="radio-icon">📻</div>
-                    <div class="radio-name">${escapeHtml(radio.name)}</div>
-                    <div class="radio-status online">● Online</div>
-                `;
-                card.addEventListener('click', () => playRadio(radio));
-                radioGrid.appendChild(card);
-            });
-        }
-
-        // ========== PLAY RADIO ==========
-        function playRadio(radio) {
-            playerTitle.textContent = radio.name;
-            playerSubtitle.textContent = 'Live Stream';
-            
-            // Random listener count for demo
-            const listeners = Math.floor(Math.random() * 500) + 50;
-            listenerCount.textContent = `${listeners} listeners`;
-            
-            // Update listener count periodically
-            setInterval(() => {
-                const newCount = Math.floor(Math.random() * 500) + 50;
-                listenerCount.textContent = `${newCount} listeners`;
-            }, 5000);
-            
-            // Set audio source and play
-            audioPlayer.src = radio.url;
-            audioPlayer.play().catch(e => {
-                console.error('Playback error:', e);
-                alert('Unable to play this stream. Please try another station.');
-            });
-            
-            playerOverlay.classList.add('active');
-        }
-
-        // ========== CLOSE PLAYER ==========
-        function closePlayer() {
-            playerOverlay.classList.remove('active');
-            audioPlayer.pause();
-            audioPlayer.src = '';
-        }
-
-        // ========== ADMIN PANEL FUNCTIONS ==========
-        function openAdmin() {
-            adminOverlay.classList.add('active');
-            if (!isAdminAuthenticated) {
-                pinSection.style.display = 'block';
-                adminContent.classList.remove('active');
-            }
-        }
-
-        function closeAdminPanel() {
-            adminOverlay.classList.remove('active');
-            pinInput.value = '';
-            pinError.style.display = 'none';
-        }
-
-        function verifyPin() {
-            if (pinInput.value === ADMIN_PIN) {
-                isAdminAuthenticated = true;
-                pinSection.style.display = 'none';
-                adminContent.classList.add('active');
-                loadAdminRadioList();
-            } else {
-                pinError.style.display = 'block';
-                pinInput.value = '';
-                pinInput.focus();
-            }
-        }
-
-        function loadAdminRadioList() {
-            radioRef.on('value', (snapshot) => {
-                radioListAdmin.innerHTML = '';
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    for (const key in data) {
-                        const radio = data[key];
-                        const item = document.createElement('div');
-                        item.className = 'radio-item-admin';
-                        item.innerHTML = `
-                            <span>${escapeHtml(radio.name)}</span>
-                            <span class="delete-btn" data-id="${key}">✕</span>
-                        `;
-                        item.querySelector('.delete-btn').addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            deleteRadio(key);
-                        });
-                        radioListAdmin.appendChild(item);
-                    }
-                }
-            });
-        }
-
-        function addRadio() {
-            const name = newRadioName.value.trim();
-            const url = newRadioUrl.value.trim();
-            
-            if (!name || !url) {
-                alert('Please fill in all fields.');
-                return;
-            }
-            
-            if (!isValidUrl(url)) {
-                alert('Please enter a valid URL.');
-                return;
-            }
-            
-            const newRadio = {
-                name: name,
-                url: url,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            };
-            
-            radioRef.push(newRadio).then(() => {
-                newRadioName.value = '';
-                newRadioUrl.value = '';
-                alert('Radio station added successfully!');
-            }).catch((error) => {
-                alert('Error adding station: ' + error.message);
-            });
-        }
-
-        function deleteRadio(id) {
-            if (confirm('Are you sure you want to delete this radio station?')) {
-                radioRef.child(id).remove().then(() => {
-                    alert('Radio station deleted successfully!');
-                }).catch((error) => {
-                    alert('Error deleting station: ' + error.message);
-                });
-            }
-        }
-
-        function filterAdminList(searchTerm) {
-            const items = radioListAdmin.querySelectorAll('.radio-item-admin');
-            items.forEach(item => {
-                const name = item.querySelector('span').textContent.toLowerCase();
-                item.style.display = name.includes(searchTerm.toLowerCase()) ? 'flex' : 'none';
-            });
-        }
-
-        // ========== SEARCH FUNCTIONALITY ==========
-        function handleSearch() {
-            const query = searchInput.value.toLowerCase().trim();
-            
-            if (query === '') {
-                renderRadios(allRadios);
-                return;
-            }
-            
-            const filtered = allRadios.filter(radio => 
-                radio.name.toLowerCase().includes(query)
-            );
-            
-            renderRadios(filtered);
-        }
-
-        function toggleSearch() {
-            searchInput.classList.toggle('active');
-            if (searchInput.classList.contains('active')) {
-                searchInput.focus();
-            } else {
-                searchInput.value = '';
-                renderRadios(allRadios);
-            }
-        }
-
-        // ========== UTILITY FUNCTIONS ==========
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        }
-
-        // ========== EVENT LISTENERS ==========
-        function setupEventListeners() {
-            // Logo click - open admin
-            logo.addEventListener('click', openAdmin);
-            
-            // Close admin
-            closeAdmin.addEventListener('click', closeAdminPanel);
-            
-            // Admin overlay click - close if clicking outside popup
-            adminOverlay.addEventListener('click', (e) => {
-                if (e.target === adminOverlay) {
-                    closeAdminPanel();
-                }
-            });
-            
-            // PIN verification
-            pinBtn.addEventListener('click', verifyPin);
-            pinInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') verifyPin();
-            });
-            
-            // Add radio
-            addRadioBtn.addEventListener('click', addRadio);
-            
-            // Delete search
-            deleteSearch.addEventListener('input', (e) => {
-                filterAdminList(e.target.value);
-            });
-            
-            // Search toggle
-            searchIcon.addEventListener('click', toggleSearch);
-            
-            // Real-time search
-            searchInput.addEventListener('input', handleSearch);
-            
-            // Player overlay click to close
-            playerOverlay.addEventListener('click', closePlayer);
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                // Escape to close overlays
-                if (e.key === 'Escape') {
-                    closeAdminPanel();
-                    closePlayer();
-                }
-            });
-        }
-
-        // ========== START APPLICATION ==========
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
